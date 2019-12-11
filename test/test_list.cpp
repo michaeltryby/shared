@@ -2,7 +2,7 @@
  ******************************************************************************
  Module:       test_list.cpp
  Description:  Test for generic list
- Authors:      Michael E. Tryby
+ Authors:      Michael Tryby
  Copyright:    see LICENSE
  License:      see LICENSE
  ******************************************************************************
