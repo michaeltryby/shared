@@ -1,35 +1,150 @@
-#ifndef __LIST_H
-#define __LIST_H
+/*
+ ******************************************************************************
+ Module:       list.h
+ Description:  Generic list
+               https://gist.github.com/pseudomuto/6334796#file-list-h
+               Accessed: April 9, 2019
+ Authors:      David Muto, Michael Tryby
+ Copyright:    see LICENSE
+ License:      see LICENSE
+ ******************************************************************************
+*/
 
-// a common function used to free malloc'd objects
-typedef void (*freeFunction)(void *);
+#ifndef LIST_H
+#define LIST_H
 
-typedef enum { FALSE, TRUE } bool;
 
-typedef bool (*listIterator)(void *);
-
-typedef struct _listNode {
-  void *data;
-  struct _listNode *next;
-} listNode;
-
-typedef struct {
-  int logicalLength;
-  int elementSize;
-  listNode *head;
-  listNode *tail;
-  freeFunction freeFn;
-} list;
-
-void list_new(list *list, int elementSize, freeFunction freeFn);
-void list_destroy(list *list);
-
-void list_prepend(list *list, void *element);
-void list_append(list *list, void *element);
-int list_size(list *list);
-
-void list_for_each(list *list, listIterator iterator);
-void list_head(list *list, void *element, bool removeFromList);
-void list_tail(list *list, void *element);
-
+#if (_MSC_VER <= 1600)
+  #define bool  int
+  #define true  1
+  #define false 0
+#else
+  #include <stdbool.h>
 #endif
+
+
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+
+// Forward declarations
+typedef struct list_node_s list_node_t;
+typedef struct list_s list_t;
+
+typedef void (*freeFunction) (void *);
+typedef bool (*listIterator) (list_node_t *);
+
+
+/**
+@brief Initializes a linked list to store elements of elementSize and to call
+freeFunction for each element when destroying a list.
+*/
+list_t *create_list(size_t elementSize, freeFunction freeFn);
+
+/**
+@brief Frees dynamically allocated nodes and optionally calls freeFunction
+with each node’s data pointer.
+*/
+void delete_list(list_t *list);
+
+/**
+@brief Adds a node to the head of the list and returns its key.
+*/
+int prepend_list(list_t *list, void *element);
+
+/**
+@brief Adds a node to the tail of the list and returns its key.
+*/
+int append_list(list_t *list, void *element);
+
+/**
+@brief Returns the number of items in the list.
+*/
+int size_list(list_t *list);
+
+
+/**
+@brief Returns pointer to list node's data.
+*/
+void *get_data(list_node_t *lnode);
+
+/**
+@brief Returns list node's key value.
+*/
+int get_key(list_node_t *lnode);
+
+/**
+@brief Returns next list node.
+*/
+list_node_t *get_next(list_node_t *lnode);
+
+/**
+@brief Frees memory associated with a list node.
+*/
+void delete_node(list_t *list,  list_node_t *lnode);
+
+
+/**
+@brief Calls the supplied iterator function with the data element of each
+node (iterates over the list).
+*/
+void for_each_list(list_t *list, listIterator iterator);
+
+/**
+@brief Returns the head of the list (optionally removing it at the same time).
+*/
+list_node_t *head_list(list_t *list, bool removeFromList);
+
+/**
+@brief Returns the tail of the list.
+*/
+list_node_t *tail_list(list_t *list);
+
+/**
+@brief Returns the list node with the given key or NULL.
+*/
+list_node_t *search_list(list_t *list, int key);
+
+/**
+@brief Removes the list node with the given key from the list.
+*/
+void remove_node(list_t *list, int key);
+
+//
+// Iterator first/done/next operations
+// http://www.cs.yale.edu/homes/aspnes/pinewiki/C(2f)Iterators.html
+// Accessed on April 11, 2019
+//
+
+
+#if (_MSC_VER <= 1600)
+
+list_node_t *first_list(list_t *list);
+
+bool done_list(list_node_t *lnode);
+
+list_node_t *next_list(list_node_t *lnode);
+
+#else
+/**
+@brief Returns list head node.
+*/
+static inline list_node_t *first_list(list_t *list) { return head_list(list, false); }
+
+/**
+@brief Returns true if end of list false otherwise.
+*/
+static inline bool done_list(list_node_t *lnode) { return lnode != NULL; }
+
+/**
+@brief Returns next node in the list.
+*/
+static inline list_node_t *next_list(list_node_t *lnode) { return get_next(lnode); }
+#endif
+
+#if defined(__cplusplus)
+}
+#endif
+
+#endif /* LIST_H */
