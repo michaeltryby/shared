@@ -4,7 +4,8 @@
  Description:  Generic list
                https://gist.github.com/pseudomuto/6334796#file-list-h
                Accessed: April 9, 2019
- Authors:      David Muto, Michael Tryby
+ Author :      David Muto
+ Modified by:  Michael Tryby
  Copyright:    see LICENSE
  License:      see LICENSE
  ******************************************************************************

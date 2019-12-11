@@ -4,7 +4,8 @@
  Description:  Generic list
                https://gist.github.com/pseudomuto/6334796#file-list-c
                Accessed: April 9, 2019
- Authors:      David Muto, Michael Tryby
+ Author:       David Muto
+ Modified by:  Michael Tryby
  Copyright:    see LICENSE
  License:      see LICENSE
  ******************************************************************************
@@ -114,8 +115,8 @@ void for_each_list(list_t *list, listIterator iterator)
     list_node_t *node = list->head;
     bool result = true;
 
-	while(node != NULL && result) {
-		result = iterator(node);
+    while(node != NULL && result) {
+        result = iterator(node);
         node = node->next;
     }
 }
@@ -198,10 +199,10 @@ int size_list(list_t *list)
 
 int get_key(list_node_t *lnode)
 {
-	if (lnode)
-		return lnode->key;
-	else
-		return -1;
+    if (lnode)
+        return lnode->key;
+    else
+        return -1;
 }
 
 void *get_data(list_node_t *lnode)
@@ -228,11 +229,11 @@ void delete_node(list_t *list, list_node_t *lnode)
 
 
 #if (_MSC_VER <= 1600)
-list_node_t *first_list(list_t *list) { return head_list(list, false); }
+    list_node_t *first_list(list_t *list) { return head_list(list, false); }
 
-bool done_list(list_node_t *lnode) { return lnode != NULL; }
+    bool done_list(list_node_t *lnode) { return lnode != NULL; }
 
-list_node_t *next_list(list_node_t *lnode) { return get_next(lnode); }
+    list_node_t *next_list(list_node_t *lnode) { return get_next(lnode); }
 #endif
 
 
