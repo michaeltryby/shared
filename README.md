@@ -1,2 +1,4 @@
-# generic-linked-list
-A generic linked list in C.
+# shared objects
+
+## Contents
+ - generic linked list
